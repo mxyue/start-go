@@ -1,0 +1,36 @@
+version: 0.5
+
+networks:
+  # Groups of hosts
+  local:
+    hosts:
+      - localhost
+
+  dev:
+    hosts:
+      - deploy@127.0.0.2
+
+commands:
+  build:
+    desc: 编译程序二进制文件
+    local: CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o=./webapi -tags=noswagger
+  pre-upload:
+    run: mkdir -p /var/www/project/
+  upload:
+    desc: 上传可执行程序
+    upload:
+      - src: ./webapi
+        dst: /var/www/project/
+  restart:
+    desc: 重启
+  post-upload:
+    desc: 清理
+    local: rm webapi
+
+targets:
+  deploy:
+    - build
+    - pre-upload
+    - upload
+    - restart
+    - post-upload

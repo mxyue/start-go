@@ -1,0 +1,14 @@
+.*
+!.gitignore
+
+### swagger ###
+docs/*
+!docs/docs.go
+
+### Binaries ###
+binaries/*
+
+### Temp ###
+temp/*
+tmp/*
+
